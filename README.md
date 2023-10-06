@@ -1,2 +1,2 @@
 # MERN_stack_auth
-token based authentication CRUD with email smtp for verification
+token based authentication CRU(D) with email smtp server for verification
