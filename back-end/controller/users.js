@@ -152,6 +152,28 @@ module.exports = {
         return res.send({username:results[0].username,id:results[0].iduser,email:results[0].useremail})
     })
   },
+  logout:(req,res)=>{
+    res.clearCookie('tokenCookie')
+    return res.sendStatus(200)
+  },
+  modifyPass:(req,res)=>{
+    try{
+        const hashed=bcrypt.hashSync(req.body.password,10,(err,hash)=>{
+            console.log(err)
+            err? res.status(500).send({msg:err}):hash
+        })
+        sql=`update users set password="${hashed}" where iduser=${req.body.id}`
+        db.query(sql,(err,result)=>{
+            if (err){
+                return res.status(400).send(err)
+            }
+            else {return res.status(200).json(result)}
+        })
+    } catch (error){
+        console.log(error);
+        return res.status(500).json({message: "server error"})
+    }
+  }
 
   
 }
