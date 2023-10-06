@@ -53,6 +53,37 @@ module.exports = {
                 activationCode+=
                 characters[Math.floor(Math.random()*characters.length)];
             }
+            //acc creation
+            db.query(`SELECT * FROM users WHERE LOWER(useremail) = LOWER(${db.escape(req.body.email)});`,(err, result)=>{
+                if (result.length){return res.status(409).send({msg:'This user is already in use!'});}
+                else {
+                    bcrypt.hash(req.body.password, 10, (err,hash)=>{
+                        if (err){
+                            return res.status(500).send({
+                                msg:err
+                            });
+                        } else {
+                            //case : password is hashed and now it's to be added to db
+                            db.query(`INSERT INTO users set username='${req.body.username}', email=${db.escape(req.body.email)}, password=${db.escape(hash)},validationCode=${db.escape(activationCode)},activationStatus=0`,(err,result)=>{
+                                if (err){
+                                    return res.status(400).send(err)
+                                }
+                                send(`<h1> Confirmation of your Registration </h1>
+                                <h2>welcome to my barebones page</h2>
+                                <p>Please enter the code below to activate your account :<p>
+                                <a>Your secret code is: "${activationCode}", do not share it with anyone!</a>`,req.body.email,'activation code')
+                                return res.status(201).send({
+                                    msg: 'user has been registered'
+                                });
+                            });
+
+                        }
+                    });
+                } 
+            })
+        }catch (error) {console.log(error);
+            res.status(400).send("fatal error");
         }
-    }
+    },
+    
 }
