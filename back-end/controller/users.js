@@ -85,5 +85,19 @@ module.exports = {
             res.status(400).send("fatal error");
         }
     },
-    
+  verifyCode: async (req,res)=>{
+    try{
+        //find user by id
+        db.query(`select * from users where email='${req.body.email}'`,(err,result)=>{
+            const token = jwt.sign({iduser:result[0].iduser},process.env.ACCESS_TOKEN_SECRET,{expiresIn: '24h'})
+            if (result.length&&result[0].validationCode===req.body.validationCode){
+                db.query(`update users set activationStatus=1 where email='${req.body.email}'`,(err,result)=>{
+                    err? res.status(500).send(err):
+                    res.status(200).cookie('tokenCookie',token,{httpOnly:false,maxAge:24*60*60*1000})//there you go! a cookie with a 24 hour lifespan
+                    return res.status(200).send(token)
+                });
+            }else res.status(402).send("incorrect Code")
+        })
+    }catch(error){res.status(400).send(error);}
+  }  ,
 }
