@@ -135,7 +135,23 @@ module.exports = {
         }
     )
   },
-  
+  getUser:(req,res,next)=>{
+    if (
+        !req.headers.authorization||
+        !req.headers.authorization.startsWith('bearer')||
+        !req.headers.authorization.split(' ')[1]
+    ){
+        return res.status(422).json({
+            message:"Please provide token"
+        });
+    }
+    const tokenCookie = req.headers.authorization.split(' ')[1];
+    const decoded= jwt.verify(tokenCookie,process.env.ACCESS_TOKEN_SECRET);
+    db.query('SELECT * FROM users where iduser?', decoded.iduser, function (error,results,fields){
+        if (error) throw error;
+        return res.send({username:results[0].username,id:results[0].iduser,email:results[0].useremail})
+    })
+  },
 
-  }
+  
 }
