@@ -99,5 +99,43 @@ module.exports = {
             }else res.status(402).send("incorrect Code")
         })
     }catch(error){res.status(400).send(error);}
-  }  ,
+  },
+  login: (req,res)=>{
+    db.query(
+        `SELECT * FROM users WHERE email='${db.escape(req.body.email)}' OR username=${db.escape(req.body.username)}`,
+        (err,result)=>{
+            //case: user does not exist  
+            if (err){
+                return res.status(400).send({msg: err});
+            }
+            else if (!result.length){
+                return res.status(401).send({
+                    msg:'email or password is incorrect'
+                });
+
+            }
+            else if (result[0].activationStatus===0){res.status(402).send('please activate your account')}
+            //password check
+            else {bcrypt.compare(req.body.password,result[0]['userpass'],(err,result)=>{
+                //case : passwrod is wrong
+                if (err){
+                    return res.status(401).send({
+                        msg:'Email or password is incorrect'
+                    });
+                }
+                if (result){
+                    const token=jwt.sign({iduser:result[0].iduser},process.env.ACCESS_TOKEN_SECRET,{expiresIn:'24h'});
+                    res.status(200).cookie('tokenCookie',token,{httpOnly:false,maxAge:24*60*60*1000})
+                    return res.status(200).send(token);
+                }
+                return res.status(401).send({
+                    msg:'Username or password is incorrect!'
+                });
+            })}
+        }
+    )
+  },
+  
+
+  }
 }
