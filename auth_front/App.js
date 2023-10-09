@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import Login from './components/Login';
 import Register from './components/Register'
 import Verification from './components/Verification'
-
+import Home from './components/Home';
 function App() {
 
   const [token,settoken]=useState('');
@@ -12,12 +12,15 @@ function App() {
   return (
   token.length?
   <NavigationContainer>
-    <Text>home</Text>
+    <Stack.Navigator initialRouteName="Home">
+      <Stack.Screen name="Home" component={Home}/>
+    </Stack.Navigator>
   </NavigationContainer>
   :<NavigationContainer>
     <Stack.Navigator initialRouteName="Login">
       <Stack.Screen name="Login" children={(cb)=><Login cb={settoken}/>}/>
-
+      <Stack.Screen name="Register"  children={(cb)=><Register cb={setEmail}/>}/>
+      <Stack.Screen name="Verification"  children={(cb)=><Verification cb2={settoken} cb={email}/>}/>
     </Stack.Navigator>
   </NavigationContainer>
   );
