@@ -183,7 +183,7 @@ const styles = StyleSheet.create({
   title: {
     fontWeight: "bold",
     fontSize: 50,
-    color: "#3CB371",
+    color: "#61DBFB",
     marginBottom: 40,
     textAlign:'center'
   },
@@ -196,14 +196,14 @@ const styles = StyleSheet.create({
   subTitle: {
     paddingTop: 30,
     paddingBottom:30,
-    color: '#3CB371',
+    color: '#61DBFB',
     textAlign: 'center',
   },
   nextButton: {
     marginTop: 30,
     borderRadius: 60,
     height: 60,
-    backgroundColor: '#3CB371',
+    backgroundColor: '#61DBFB',
     justifyContent: 'center',
     minWidth: 300,
     marginBottom: 100,

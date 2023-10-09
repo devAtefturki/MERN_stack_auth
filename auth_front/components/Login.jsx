@@ -20,24 +20,26 @@ console.log(credentials);
 
 
     return(
-        <View>
-            <Text>Login</Text>
-            <View>
-                <TextInput placeholder='Email...'
+        <View style={styles.container}>
+            <Text style={styles.logo}>Login</Text>
+            <View style={styles.inputView}>
+                <TextInput 
+                style={styles.inputText} placeholder='Email...'
                 onChangeText={text=>setCredentials({...credentials,email:text})}/>
             </View>
-            <View>
+            <View style={styles.inputView}>
                 <TextInput
+                style={styles.inputText}
                 secureTextEntry
                 placeholder='Password...'
                 onChangeText={text=>setCredentials({...credentials,password:text})}
                 />
             </View>
             <TouchableOpacity onPress={()=>{navigation.navigate('Verification')}}>
-                <Text>Verify your account ?</Text>
+                <Text style={styles.loginText}>Verify your account ?</Text>
             </TouchableOpacity>
             <TouchableOpacity >
-                <Text>Forgot Password? (coming soon)</Text>
+                <Text style={styles.forgot}>Forgot Password? (coming soon)</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={
                 axios
@@ -50,14 +52,59 @@ console.log(credentials);
                     )
                 })
             }
-            > 
-            <Text>LOGIN</Text>
+             style={styles.loginBtn}> 
+            <Text style={styles.loginText}>LOGIN</Text>
             </TouchableOpacity>
 
             <TouchableOpacity onPress={()=>{navigation.navigate('Register')}}>
-                <Text>dont have an account? Register</Text>
+                <Text style={styles.loginText}>dont have an account? Register</Text>
             </TouchableOpacity>
         </View>
     )
 }
+const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: '#fff',
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    logo: {
+      fontWeight: "bold",
+      fontSize: 50,
+      color: "#61DBFB",
+      marginBottom: 40
+    },
+    inputView: {
+      width: "80%",
+      backgroundColor: "#fff",
+      borderBottomWidth:1,
+      borderRadius: 25,
+      height: 50,
+      marginBottom: 20,
+      justifyContent: "center",
+      padding: 20
+    },
+    inputText: {
+      height: 50,
+      color: "black"
+    },
+    forgot: {
+      color: "white",
+      fontSize: 11
+    },
+    loginBtn: {
+      width: "80%",
+      backgroundColor: "#61DBFB",
+      borderRadius: 25,
+      height: 50,
+      alignItems: "center",
+      justifyContent: "center",
+      marginTop: 40,
+      marginBottom: 10
+    },
+    loginText: {
+      color: "black"
+    }
+  });
 export default Login
