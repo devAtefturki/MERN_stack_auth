@@ -36,6 +36,7 @@ PASS_LABELS=["Too Short","Weak", "Normal","Strong","Secure"];
             <View style={styles.inputView}>
                 <TextInput
                 secureTextEntry
+                maxLength={15}
                 style={styles.inputText}
                 placeholderTextColor="#003F5C"
                 placeholder="Password..."
