@@ -96,7 +96,7 @@ const Verification = ({cb,cb2}) => {
   return (
     <SafeAreaView style={styles.root}>
       <Text style={styles.title}>Verification</Text>
-      <Image style={styles.icon} source={require("../../assets/4.png")} />
+      <Image style={styles.icon} source={require("../assets/4.png")} />
       <Text style={styles.subTitle}>
         {cb.length? `Please enter the verification code from your inbox`:`Please enter your email and verification code`}
       </Text>

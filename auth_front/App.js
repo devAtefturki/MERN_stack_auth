@@ -1,9 +1,10 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import {useState} from 'react'
 import Login from './components/Login';
 import Register from './components/Register'
 import Verification from './components/Verification'
 import Home from './components/Home';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { useNavigation, NavigationContainer } from '@react-navigation/native';
 function App() {
 
   const [token,settoken]=useState('');
