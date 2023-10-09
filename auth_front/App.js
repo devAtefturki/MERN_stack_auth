@@ -14,7 +14,7 @@ function App() {
   token.length?
   <NavigationContainer>
     <Stack.Navigator initialRouteName="Home">
-      <Stack.Screen name="Home" component={Home}/>
+      <Stack.Screen name="Home" children={(cb)=><Home cb={settoken} cb2={setEmail}/>}/>
     </Stack.Navigator>
   </NavigationContainer>
   :<NavigationContainer>

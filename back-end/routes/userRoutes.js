@@ -6,10 +6,10 @@ const {register, getUser, login, logout, verifyCode, modifyPass}=require("../con
 
 router.post('/register',register)
 router.post('/verify',verifyCode)
-router.post('login',login)
-router.get('logout',logout)
-router.get('getUser',getUser)
-router.put('updatePass',modifyPass)
+router.post('/login',login)
+router.get('/logout',logout)
+router.get('/getUser',getUser)
+router.put('/updatePass',modifyPass)
 
 
 module.exports =router
