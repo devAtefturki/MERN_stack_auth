@@ -65,7 +65,7 @@ console.log(credentials);
 const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: '#fff',
+      backgroundColor: '#f7f7f7',
       alignItems: 'center',
       justifyContent: 'center',
     },

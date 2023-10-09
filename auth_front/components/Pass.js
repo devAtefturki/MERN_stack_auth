@@ -89,3 +89,4 @@ PassMeter.defaultProps = {
     fromColor: 'red',
     toColor: 'green',
 }
+export default PassMeter;

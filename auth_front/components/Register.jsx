@@ -2,6 +2,10 @@ import React, {useState} from 'react';
 import {StyleSheet,Text,View,TextInput,TouchableOpacity,Alert} from 'react-native';
 import axios from 'axios';
 import{useNavigation} from '@react-navigation/native';
+import PassMeter from './Pass'
+
+
+
 
 const Register=({callback})=>{
 const [credentials,setCredentials]=useState({username:'',useremail:'',password:''});
@@ -12,35 +16,50 @@ const navigation = useNavigation();
 const MAX_LENGTH=15,
 MIN_LENGTH=8,
 PASS_LABELS=["Too Short","Weak", "Normal","Strong","Secure"];
+
     return (
         <View style={styles.container}>
             <Text style={styles.logo}>Registration</Text>
             <View style={styles.inputView}>
                 <TextInput 
                 style={styles.inputText}
-                placeHolder='username...'
+                placeholder='Username...'
+                placeholderTextColor="#003F5C"
                 onChangeText={text=>setCredentials({...credentials,username:text})}/>
             </View>
             <View style={styles.inputView}>
                 <TextInput style={styles.inputText}
                 placeholder='Email...'
+                placeholderTextColor="#003F5C"
                 onChangeText={text=>setCredentials({...credentials,useremail:text})}/>
             </View>
             <View style={styles.inputView}>
                 <TextInput
                 secureTextEntry
-                style={styles.inputView}
+                style={styles.inputText}
+                placeholderTextColor="#003F5C"
                 placeholder="Password..."
                 onChangeText={text=>setCredentials({...credentials,password:text})}/>
             </View>
-        {/* <!-- pass judgement --> */}
-            <View>
+            
+            <PassMeter
+       showLabels
+       password={credentials.password}
+       maxLength={MAX_LENGTH}
+       minLength={MIN_LENGTH}
+       labels={PASS_LABELS}
+      /> 
+      
+            <View style={styles.inputView}>
                 <TextInput 
+                style={styles.inputText}
                 secureTextEntry
+                placeholderTextColor="#003F5C"
                 placeholder="Retype Password To Confirm..."
                 onChangeText={text=>setCheck(text)}/>
             </View>
-        #<TouchableOpacity onPress={
+        <TouchableOpacity 
+        style={styles.loginBtn} onPress={
                 ()=>{
                     if (check!==credentials.password){
                         return Alert.alert("password does not match")
@@ -66,14 +85,14 @@ PASS_LABELS=["Too Short","Weak", "Normal","Strong","Secure"];
 const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: '#fff',
+      backgroundColor: '#f7f7f7',
       alignItems: 'center',
       justifyContent: 'center',
     },
     logo: {
       fontWeight: "bold",
       fontSize: 50,
-      color: "#3CB371",
+      color: "#61DBFB",
       marginBottom: 40
     },
     inputView: {
@@ -96,7 +115,7 @@ const styles = StyleSheet.create({
     },
     loginBtn: {
       width: "80%",
-      backgroundColor: "#3CB371",
+      backgroundColor: "#61DBFB",
       borderRadius: 25,
       height: 50,
       alignItems: "center",
@@ -108,4 +127,4 @@ const styles = StyleSheet.create({
       color: "white"
     }
   });
-export default Register
+export default Register;

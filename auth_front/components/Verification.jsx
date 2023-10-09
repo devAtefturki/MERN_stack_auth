@@ -146,7 +146,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     borderRadius: CELL_BORDER_RADIUS,
     color: '#3759b8',
-    backgroundColor: '#fff',
+    backgroundColor: '#f7f7f7',
 
     // IOS
     shadowColor: '#000',
@@ -154,7 +154,7 @@ const styles = StyleSheet.create({
       width: 0,
       height: 1,
     },
-    shadowOpacity: 0.22,
+    shadowOpacity: 0.02,
     shadowRadius: 2.22,
 
     // Android
