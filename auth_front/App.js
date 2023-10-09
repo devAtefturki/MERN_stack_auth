@@ -1,18 +1,26 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
-import AppContainer from './components/navigation';
+import Login from './components/Login';
+import Register from './components/Register'
+import Verification from './components/Verification'
 
-export default function App() {
+function App() {
+
+  const [token,settoken]=useState('');
+  const Stack=createNativeStackNavigator();
+  const [email,setEmail]=useState('');
   return (
-  <AppContainer/>
+  token.length?
+  <NavigationContainer>
+    <Text>home</Text>
+  </NavigationContainer>
+  :<NavigationContainer>
+    <Stack.Navigator initialRouteName="Login">
+      <Stack.Screen name="Login" children={(cb)=><Login cb={settoken}/>}/>
+
+    </Stack.Navigator>
+  </NavigationContainer>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default App;

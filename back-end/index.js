@@ -1,4 +1,5 @@
 const express = require ('express');
+const users= require('./routes/userRoutes')
 const cors = require ('cors');
 const db = require('./database/index');
 require("dotenv").config();
@@ -16,4 +17,5 @@ app.use(cookieParser())
 
 app.get("/",(req,res)=>res.json('are you a webcrawler? nothing to see here!'))
 
+app.use('/users',users)
 app.listen(PORT,()=>console.log(`Server is running on port ${PORT}`));
