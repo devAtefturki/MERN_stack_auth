@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {StyleSheet,Text,View,TextInput,TouchableOpacity,Alert} from 'react-native';
 import axios from 'axios';
-axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*';
+//axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*';
 import{useNavigation} from '@react-navigation/native';
 import PassMeter from './Pass'
 
@@ -67,14 +67,25 @@ PASS_LABELS=["Too Short","Weak", "Normal","Strong","Secure"];
                         return Alert.alert("password does not match")
                     }
                     check===credentials.userpass?
-                    axios
-                    .post('http://localhost:4000/users/register',credentials)
-                    .then((resp)=>{
-                        callback(credentials.useremail)
+                     axios
+                     .post('http://localhost:4000/users/register',credentials)
+                     .then((resp)=>{
+                         callback(credentials.useremail)
                         navigation.navigate('Verification')
-                    })
+                   })
                     .catch(error=>{Alert.alert("Incorrect Credentials","user already exists")})
-                    :null
+                    // axios({
+                    //   method: 'post',
+                    //   url: 'http://localhost:4000/users/register',
+                    //   headers: 'Access-Control-Allow-Origin: *',
+                    //   data: credentials
+                      
+                    // }).then((resp)=>{
+                    //   callback(credentials.useremail)
+                    //   navigation.navigate('Verification')
+                    // }).catch(error=>{Alert.alert('incorrect credentials','user already exists')})
+                
+                     :null
                 }
 
             }

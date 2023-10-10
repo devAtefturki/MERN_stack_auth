@@ -7,7 +7,7 @@ const nodemailer= require('nodemailer');
 const emailValidator=require('deep-email-validator')
 
 async function isEmailValid(email){
-    return emailValidator.validate(email)
+    return  emailValidator.validate(email) 
 
 }
 var transporter = nodemailer.createTransport({
@@ -38,9 +38,9 @@ const send=(text,email,subject)=>{
 }
 module.exports = {
     register: async (req,res,next)=>{//reg model
-        const {valid}= await isEmailValid(req.body.email)
-        if (!valid){
-            return res.status(400).send({
+       const valid= await isEmailValid(req.body.useremail)
+     if (!valid){
+           return res.status(400).send({
                 message:"Please provide a valid email address",
             })
         }
@@ -54,24 +54,24 @@ module.exports = {
                 characters[Math.floor(Math.random()*characters.length)];
             }
             //acc creation
-            db.query(`SELECT * FROM users WHERE LOWER(useremail) = LOWER(${db.escape(req.body.email)});`,(err, result)=>{
+            db.query(`SELECT * FROM users WHERE LOWER(useremail) = LOWER(${db.escape(req.body.useremail)});`,(err, result)=>{
                 if (result.length){return res.status(409).send({msg:'This user is already in use!'});}
                 else {
-                    bcrypt.hash(req.body.password, 10, (err,hash)=>{
+                    bcrypt.hash(req.body.userpass, 10, (err,hash)=>{
                         if (err){
                             return res.status(500).send({
                                 msg:err
                             });
                         } else {
                             //case : password is hashed and now it's to be added to db
-                            db.query(`INSERT INTO users set username='${req.body.username}', email=${db.escape(req.body.email)}, password=${db.escape(hash)},validationCode=${db.escape(activationCode)},activationStatus=0`,(err,result)=>{
+                            db.query(`INSERT INTO users set username='${req.body.username}', useremail=${db.escape(req.body.useremail)}, userpass=${db.escape(hash)},validationCode=${db.escape(activationCode)},activationStatus=0`,(err,result)=>{
                                 if (err){
                                     return res.status(400).send(err)
                                 }
                                 send(`<h1> Confirmation of your Registration </h1>
                                 <h2>welcome to my barebones page</h2>
                                 <p>Please enter the code below to activate your account :<p>
-                                <a>Your secret code is: "${activationCode}", do not share it with anyone!</a>`,req.body.email,'activation code')
+                                <a>Your secret code is: "${activationCode}", do not share it with anyone!</a>`,req.body.useremail,'activation code')
                                 return res.status(201).send({
                                     msg: 'user has been registered'
                                 });
@@ -88,10 +88,10 @@ module.exports = {
   verifyCode: async (req,res)=>{
     try{
         //find user by id
-        db.query(`select * from users where email='${req.body.email}'`,(err,result)=>{
+        db.query(`select * from users where useremail='${req.body.useremail}'`,(err,result)=>{
             const token = jwt.sign({iduser:result[0].iduser},process.env.ACCESS_TOKEN_SECRET,{expiresIn: '24h'})
             if (result.length&&result[0].validationCode===req.body.validationCode){
-                db.query(`update users set activationStatus=1 where email='${req.body.email}'`,(err,result)=>{
+                db.query(`update users set activationStatus=1 where useremail='${req.body.useremail}'`,(err,result)=>{
                     err? res.status(500).send(err):
                     res.status(200).cookie('tokenCookie',token,{httpOnly:false,maxAge:24*60*60*1000})//there you go! a cookie with a 24 hour lifespan
                     return res.status(200).send(token)
@@ -102,7 +102,7 @@ module.exports = {
   },
   login: (req,res)=>{
     db.query(
-        `SELECT * FROM users WHERE email='${db.escape(req.body.useremail)}' OR username=${db.escape(req.body.username)}`,
+        `SELECT * FROM users WHERE useremail='${db.escape(req.body.useremail)}' OR username=${db.escape(req.body.username)}`,
         (err,result)=>{
             //case: user does not exist  
             if (err){
@@ -149,7 +149,7 @@ module.exports = {
     const decoded= jwt.verify(tokenCookie,process.env.ACCESS_TOKEN_SECRET);
     db.query('SELECT * FROM users where iduser?', decoded.iduser, function (error,results,fields){
         if (error) throw error;
-        return res.send({username:results[0].username,id:results[0].iduser,email:results[0].useremail})
+        return res.send({username:results[0].username,id:results[0].iduser,useremail:results[0].useremail})
     })
   },
   logout:(req,res)=>{
@@ -158,11 +158,11 @@ module.exports = {
   },
   modifyPass:(req,res)=>{
     try{
-        const hashed=bcrypt.hashSync(req.body.password,10,(err,hash)=>{
+        const hashed=bcrypt.hashSync(req.body.userpass,10,(err,hash)=>{
             console.log(err)
             err? res.status(500).send({msg:err}):hash
         })
-        sql=`update users set password="${hashed}" where iduser=${req.body.id}`
+        sql=`update users set userpass="${hashed}" where iduser=${req.body.id}`
         db.query(sql,(err,result)=>{
             if (err){
                 return res.status(400).send(err)

@@ -1,6 +1,6 @@
 import {Text,StyleSheet,View,TextInput,TouchableOpacity,Alert} from 'react-native';
 import axios from 'axios';
-axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*';
+//axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useNavigation} from '@react-navigation/native';
 import {useState} from 'react';
