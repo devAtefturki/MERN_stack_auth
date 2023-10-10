@@ -88,9 +88,9 @@ module.exports = {
   verifyCode: async (req,res)=>{
     try{
         //find user by id
-        db.query(`select * from users where useremail='${req.body.useremail}'`,(err,result)=>{
+        db.query(`select * from users where useremail=${req.body.useremail}`,(err,result)=>{
             console.log(result)
-            const token = jwt.sign({iduser:result[0].iduser},process.env.ACCESS_TOKEN_SECRET,{expiresIn: '24h'})
+            const token = jwt.sign({iduser:result[0]["iduser"]},process.env.ACCESS_TOKEN_SECRET,{expiresIn: '24h'})
             if (result.length&&result[0].validationCode===req.body.ValidatorCode){
                 db.query(`update users set activationStatus=1 where useremail='${req.body.useremail}'`,(err,result)=>{
                     err? res.status(500).send(err):
@@ -117,16 +117,16 @@ module.exports = {
             }
             else if (result[0].activationStatus===0){res.status(402).send('please activate your account')}
             //password check
-            else {bcrypt.compare(req.body.userpass,result[0]['userpass'],(err,result)=>{
+            else {bcrypt.compare(req.body.userpass,result[0]['userpass'],(err,result2)=>{
                 //case : passwrod is wrong
                 if (err){
                     return res.status(401).send({
                         msg:'Email or password is incorrect'
                     });
                 }
-                if (result){
+                if (result2){
                     console.log(result)
-                    const token=jwt.sign({iduser:result[0].iduser},process.env.ACCESS_TOKEN_SECRET,{expiresIn:'24h'});
+                    const token=jwt.sign({iduser:result[0]['iduser']},process.env.ACCESS_TOKEN_SECRET,{expiresIn:'24h'});
                     res.status(200).cookie('tokenCookie',token,{httpOnly:false,maxAge:24*60*60*1000})
                     return res.status(200).send(token);
                 }

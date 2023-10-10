@@ -1,12 +1,12 @@
 import {Text,StyleSheet,View,TextInput,TouchableOpacity,Alert} from 'react-native';
 import axios from 'axios';
-axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*';
+//axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useNavigation} from '@react-navigation/native';
 import {useState} from 'react';
 
 
-const Login= ({callback})=>{
+const Login= ({cb})=>{
 const [credentials, setCredentials]=useState({useremail:'',userpass:''});
 const navigation= useNavigation();
 
@@ -45,7 +45,7 @@ console.log(credentials);
             <TouchableOpacity onPress={()=>{
                 axios
                 .post('http://localhost:4000/users/login',credentials)
-                .then((resp)=>{storeData(resp.data);callback('logged In')})
+                .then((resp)=>{storeData(resp.data),cb(resp.data)})
                 .catch(error=>{
                     Alert.alert(
                         'incorrect credentials',

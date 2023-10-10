@@ -1,4 +1,4 @@
-import {Text} from 'react-native';
+import {Text,View,Button} from 'react-native';
 import axios from 'axios';
 
 function Home({cb,cb2}){
