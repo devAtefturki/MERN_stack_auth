@@ -89,8 +89,9 @@ module.exports = {
     try{
         //find user by id
         db.query(`select * from users where useremail='${req.body.useremail}'`,(err,result)=>{
+            console.log(result)
             const token = jwt.sign({iduser:result[0].iduser},process.env.ACCESS_TOKEN_SECRET,{expiresIn: '24h'})
-            if (result.length&&result[0].validationCode===req.body.validationCode){
+            if (result.length&&result[0].validationCode===req.body.ValidatorCode){
                 db.query(`update users set activationStatus=1 where useremail='${req.body.useremail}'`,(err,result)=>{
                     err? res.status(500).send(err):
                     res.status(200).cookie('tokenCookie',token,{httpOnly:false,maxAge:24*60*60*1000})//there you go! a cookie with a 24 hour lifespan
@@ -102,7 +103,7 @@ module.exports = {
   },
   login: (req,res)=>{
     db.query(
-        `SELECT * FROM users WHERE useremail='${db.escape(req.body.useremail)}' OR username=${db.escape(req.body.username)}`,
+        `SELECT * FROM users WHERE useremail=${db.escape(req.body.useremail)} OR username=${db.escape(req.body.useremail)}`,
         (err,result)=>{
             //case: user does not exist  
             if (err){
@@ -124,6 +125,7 @@ module.exports = {
                     });
                 }
                 if (result){
+                    console.log(result)
                     const token=jwt.sign({iduser:result[0].iduser},process.env.ACCESS_TOKEN_SECRET,{expiresIn:'24h'});
                     res.status(200).cookie('tokenCookie',token,{httpOnly:false,maxAge:24*60*60*1000})
                     return res.status(200).send(token);

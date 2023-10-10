@@ -1,6 +1,6 @@
 import {Text,StyleSheet,View,TextInput,TouchableOpacity,Alert} from 'react-native';
 import axios from 'axios';
-//axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*';
+axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useNavigation} from '@react-navigation/native';
 import {useState} from 'react';
@@ -42,17 +42,17 @@ console.log(credentials);
             <TouchableOpacity >
                 <Text style={styles.forgot}>Forgot Password? (coming soon)</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={
+            <TouchableOpacity onPress={()=>{
                 axios
                 .post('http://localhost:4000/users/login',credentials)
-                .then((resp)=>{storeData(resp.data);callback('logged in')})
+                .then((resp)=>{storeData(resp.data);callback('logged In')})
                 .catch(error=>{
                     Alert.alert(
                         'incorrect credentials',
                         'please check your email or password'
                     )
                 })
-            }
+             } }
              style={styles.loginBtn}> 
             <Text style={styles.loginText}>LOGIN</Text>
             </TouchableOpacity>

@@ -119,7 +119,7 @@ const Verification = ({cb,cb2}) => {
       />
       <TouchableOpacity style={styles.nextButton} onPress={()=>{
         axios
-        .post('http://localhost:4000/users/verify',{ValidatorCode:value,email:em})
+        .post('http://localhost:4000/users/verify',{ValidatorCode:value,useremail:em})
         .then(resp=>{storeData(resp.data);cb2('logged In')})
         .catch(erre => {Alert.alert("Incorrect credentials","user already exists")})
       }}>
