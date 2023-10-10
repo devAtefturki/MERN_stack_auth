@@ -3,7 +3,8 @@ import axios from 'axios';
 //axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useNavigation} from '@react-navigation/native';
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
+//import {componentDidMount} from 'react';
 
 
 const Login= ({cb})=>{
@@ -12,11 +13,19 @@ const navigation= useNavigation();
 
 const storeData=async (value)=>{
     try{
-await AsyncStorage.setItem('token',value)
+await AsyncStorage.setItem('tokenCookie',value)
     } catch(e){
         //save error
     }
 }
+const onscreenload=async ()=>{
+  const val= await AsyncStorage.getItem('tokenCookie');
+  if (val!==null){return cb(val)}
+ 
+}
+useEffect (()=>{onscreenload()},[])
+
+
 console.log(credentials);
 
 

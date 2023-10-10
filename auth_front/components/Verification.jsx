@@ -48,7 +48,7 @@ const Verification = ({cb,cb2}) => {
   const [em,setEm]=useState(cb)
   const storeData = async (value) => {
     try {
-      await AsyncStorage.setItem('token', value)
+      await AsyncStorage.setItem('tokenCookie', value)
     } catch (e) {
       // saving error
     }
