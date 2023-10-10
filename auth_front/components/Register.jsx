@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {StyleSheet,Text,View,TextInput,TouchableOpacity,Alert} from 'react-native';
 import axios from 'axios';
+axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*';
 import{useNavigation} from '@react-navigation/native';
 import PassMeter from './Pass'
 
@@ -8,7 +9,7 @@ import PassMeter from './Pass'
 
 
 const Register=({callback})=>{
-const [credentials,setCredentials]=useState({username:'',useremail:'',password:''});
+const [credentials,setCredentials]=useState({username:'',useremail:'',userpass:''});
 const [check,setCheck]=useState("")
 
 const navigation = useNavigation();
@@ -40,12 +41,12 @@ PASS_LABELS=["Too Short","Weak", "Normal","Strong","Secure"];
                 style={styles.inputText}
                 placeholderTextColor="#003F5C"
                 placeholder="Password..."
-                onChangeText={text=>setCredentials({...credentials,password:text})}/>
+                onChangeText={text=>setCredentials({...credentials,userpass:text})}/>
             </View>
             
             <PassMeter
        showLabels
-       password={credentials.password}
+       password={credentials.userpass}
        maxLength={MAX_LENGTH}
        minLength={MIN_LENGTH}
        labels={PASS_LABELS}
@@ -62,14 +63,14 @@ PASS_LABELS=["Too Short","Weak", "Normal","Strong","Secure"];
         <TouchableOpacity 
         style={styles.loginBtn} onPress={
                 ()=>{
-                    if (check!==credentials.password){
+                    if (check!==credentials.userpass){
                         return Alert.alert("password does not match")
                     }
-                    check===credentials.password?
+                    check===credentials.userpass?
                     axios
                     .post('http://localhost:4000/users/register',credentials)
                     .then((resp)=>{
-                        callback(credentials.email)
+                        callback(credentials.useremail)
                         navigation.navigate('Verification')
                     })
                     .catch(error=>{Alert.alert("Incorrect Credentials","user already exists")})
