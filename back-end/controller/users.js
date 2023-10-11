@@ -143,15 +143,19 @@ module.exports = {
         !req.headers.authorization.startsWith('bearer')||
         !req.headers.authorization.split(' ')[1]
     ){
+   //     console.log(!req.headers.authorization||2, "req.heas.auth",
+    //        !req.headers.authorization.startsWith('bearer')||2,"req.heads.auth bearer",
+    //        !req.headers.authorization.split(' ')[1] || 2,"req.heads.split");
+    //        console.log(req.headers.authorization,req.headers.authorization.split(' ')[1])
         return res.status(422).json({
             message:"Please provide token"
         });
     }
     const tokenCookie = req.headers.authorization.split(' ')[1];
     const decoded= jwt.verify(tokenCookie,process.env.ACCESS_TOKEN_SECRET);
-    db.query('SELECT * FROM users where iduser?', decoded.iduser, function (error,results,fields){
+    db.query('SELECT * FROM users where iduser=?', decoded.iduser, function (error,results,fields){
         if (error) throw error;
-        return res.send({username:results[0].username,id:results[0].iduser,useremail:results[0].useremail})
+        return res.send({username:results[0].username,iduser:results[0].iduser,useremail:results[0].useremail})
     })
   },
   logout:(req,res)=>{
