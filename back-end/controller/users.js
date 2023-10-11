@@ -89,12 +89,14 @@ module.exports = {
   verifyCode: async (req,res)=>{
     try{
         //find user by id
-        db.query(`select * from users where useremail=${req.body.useremail}`,(err,result)=>{
+        db.query(`select * from users where useremail=${db.escape(req.body.useremail)}`,(err,result)=>{
             console.log(result,req.body)
-            const token = jwt.sign({iduser:result["iduser"]},process.env.ACCESS_TOKEN_SECRET,{expiresIn: '24h'})
-            if (result.length&&result[0].validationCode===req.body.ValidatorCode){
-                db.query(`update users set activationStatus=1 where useremail='${req.body.useremail}'`,(err,result)=>{
+            const token = jwt.sign({iduser:result[0]["iduser"]},process.env.ACCESS_TOKEN_SECRET,{expiresIn: '24h'})
+            if (result.length&&result[0]["validationCode"]===req.body.ValidatorCode){
+                
+                db.query(`update users set activationStatus=1 where useremail='${req.body.useremail}'`,(err,result5)=>{
                     err? res.status(500).send(err):
+                    console.log(result5)
                     res.status(200).cookie('tokenCookie',token,{httpOnly:false,maxAge:24*60*60*1000})//there you go! a cookie with a 24 hour lifespan
                     return res.status(200).send(token)
                 });

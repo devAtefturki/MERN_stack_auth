@@ -1,6 +1,7 @@
 import {Animated, Image, SafeAreaView, Text, View,StyleSheet, Platform,TouchableOpacity,TextInput} from 'react-native';
-import React, {useState} from 'react';
-
+import React, {useState,useEffect} from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+//import {useNavigation} from '@react-navigation/native';
 import {
   CodeField,
   Cursor,
@@ -39,6 +40,8 @@ const animateCell = ({hasValue, index, isFocused}) => {
 };
 
 const Verification = ({cb,cb2}) => {
+ // const navigation= useNavigation()
+  const [dummyState,SetDummyState]=useState("")
   const [value, setValue] = useState('');
   const ref = useBlurOnFulfill({value, cellCount: CELL_COUNT});
   const [props, getCellOnLayoutHandler] = useClearByFocusCell({
@@ -53,6 +56,14 @@ const Verification = ({cb,cb2}) => {
       // saving error
     }
   }
+
+  const onscreenload=async ()=>{
+    const val= await AsyncStorage.getItem('tokenCookie');
+    if (val!==null){return cb2(val)}
+   
+  }
+  useEffect (()=>{onscreenload()},[])
+
 
   const renderCell = ({index, symbol, isFocused}) => {
     const hasValue = Boolean(symbol);
@@ -105,13 +116,13 @@ const Verification = ({cb,cb2}) => {
         style={styles.inputText}
         placeholder="Email..."
         placeholderTextColor="#003f5c"
-        onChangeText={text => setEm(text)} />
+        onChangeText={(text) =>{ setEm(text),console.log(em,value)}} />
          </View> }
       <CodeField
         ref={ref}
         {...props}
         value={value}
-        onChangeText={setValue}
+        onChangeText={(text)=>{setValue(text),console.log(em,value)}}
         cellCount={CELL_COUNT}
         rootStyle={styles.codeFieldRoot}
         textContentType="oneTimeCode"
@@ -120,12 +131,13 @@ const Verification = ({cb,cb2}) => {
       <TouchableOpacity style={styles.nextButton} onPress={()=>{
         axios
         .post('http://localhost:4000/users/verify',{ValidatorCode:value,useremail:em})
-        .then(resp=>{storeData(resp.data);cb2('logged In')})
+        .then(resp=>{storeData(resp.data),console.log(resp),SetDummyState("wham!"),onscreenload()/*,navigation.navigate('Home')*/ /*,cb2(AsyncStorage.getItem('tokenCookie'))*/})
         .catch(erre => {Alert.alert("Incorrect credentials","user already exists")})
       }}>
         
         <Text style={styles.nextButtonText}>Verify</Text>
       </TouchableOpacity>
+      <View><Text style={{fontSize:3,color:"#ffffff"}}>{dummyState}</Text></View>
     </SafeAreaView>
   );
 };

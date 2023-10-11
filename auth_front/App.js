@@ -21,7 +21,7 @@ function App() {
     <Stack.Navigator initialRouteName="Login">
       <Stack.Screen name="Login" children={(cb)=><Login cb={settoken}/>}/>
       <Stack.Screen name="Verification"  children={(cb)=><Verification cb2={settoken} cb={email}/>}/>
-      <Stack.Screen name="Register"  children={(cb)=><Register cb={setEmail}/>}/>
+      <Stack.Screen name="Register"  children={(cb)=><Register cb={setEmail} cb2={settoken}/>}/>
     </Stack.Navigator>
   </NavigationContainer>
   );
