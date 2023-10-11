@@ -15,6 +15,7 @@ var transporter = nodemailer.createTransport({
     port: 465,
     secure: true,
     auth: {
+        type:"login",
         user: `${process.env.EMAIL}`,
         pass: `${process.env.EMAIL_PASSWORD}`
     }
@@ -89,8 +90,8 @@ module.exports = {
     try{
         //find user by id
         db.query(`select * from users where useremail=${req.body.useremail}`,(err,result)=>{
-            console.log(result)
-            const token = jwt.sign({iduser:result[0]["iduser"]},process.env.ACCESS_TOKEN_SECRET,{expiresIn: '24h'})
+            console.log(result,req.body)
+            const token = jwt.sign({iduser:result["iduser"]},process.env.ACCESS_TOKEN_SECRET,{expiresIn: '24h'})
             if (result.length&&result[0].validationCode===req.body.ValidatorCode){
                 db.query(`update users set activationStatus=1 where useremail='${req.body.useremail}'`,(err,result)=>{
                     err? res.status(500).send(err):
